@@ -36,17 +36,16 @@ class DicePool:
         rolls = [die.roll() for die in self.dice]
         result = sum(rolls) + self.flat
         if verbose:
-            print(f"{result} = {" ".join(str(result) for result in rolls)} + {self.flat}")
+            print(f"{result} = {" ".join(str(result) for result in rolls)}" + (f" + {self.flat}" if self.flat > 0 else ""))
         return result
     
     def roll(self, times:int=1, verbose:bool=True) -> tuple[int, ...]:
         if verbose:
-            print(f"total = {' + '.join(f'{n}d{value}' for value, n in self.groups.items())} + {self.flat}")
+            message_die_part =' + '.join(f'{n}d{value}' for value, n in self.groups.items()) 
+            print(f"total = {message_die_part}" + (f" + {self.flat}" if self.flat > 0 else ""))
         results = tuple(self._roll_single(verbose) for _ in range(times))
         return results
             
-        
-
 def parse_die(die:str) -> tuple[Die,...]:
     assert die.count("d") == 1
     d_idx = die.index("d")
@@ -87,7 +86,7 @@ def parse_args(argv:list[str]|None=None) -> RollArgs:
 
 def main(argv:list[str]|None=None) -> int:
     args = parse_args(argv)
-    args.pool.roll(20, verbose=True)
+    args.pool.roll(3, verbose=True)
     return 0
 
 if __name__ == "__main__":
